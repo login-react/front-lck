@@ -92,6 +92,7 @@ export default {
     },
     handleInit() {
       this.gn = gen(5678);
+      console.log('初始化成功🚗')
     }
   },
 };
