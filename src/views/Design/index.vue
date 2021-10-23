@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: taimin_zhou
  * @Date: 2021-10-21 11:37:55
- * @LastEditTime: 2021-10-23 21:17:55
+ * @LastEditTime: 2021-10-23 21:24:09
  * @LastEditors: taimin_zhou
 -->
 <template>
@@ -67,6 +67,8 @@ export default {
     handlePageData() {
       // const value = this.gn.next();
       const { done, value } = this.genState;
+      console.log('done :>> ', done);
+      console.log('value ==== test:>> ', value);
       if (done) return;
       if (!value || !value.type) return;
       if (value.type === "QUERY_MODEL") {
