@@ -9,6 +9,8 @@
   <div>
     <el-button @click="handlePageData">线是否连接</el-button>
     <div @click="handleClickRun">点击运行</div>
+    <el-button @click="handleInit">点击重置</el-button>
+
     <div v-if="isShow">
       <AsyncList />
     </div>
@@ -18,7 +20,7 @@
 <script>
 import EventFlow from "./Event";
 // import { flowList } from "./Flow";
-import { gn } from "./Design";
+import { gen } from "./Design";
 import LoadingComponent from "../AsyncList/LoadingComponent.vue";
 import ErrorComponent from "../AsyncList/ErrorComponent.vue";
 // const designUtils = new DesignUtils(flowList.nodeList, flowList.lineList);
@@ -34,12 +36,15 @@ export default {
   data() {
     return {
       isShow: false,
+      ge: null
     };
   },
   components: {
     AsyncList,
   },
-  mounted() {},
+  mounted() {
+    this.gn = gen(1234)
+  },
   methods: {
     handleClickRun() {
       this.isShow = true;
@@ -82,9 +87,12 @@ export default {
       eventFlow.runFlow(list);
     },
     handlePageData() {
-      const value = gn.next();
+      const value = this.gn.next();
       console.log(`value--->>>>>`, value);
     },
+    handleInit() {
+      this.gn = gen(5678);
+    }
   },
 };
 </script>

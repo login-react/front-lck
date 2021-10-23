@@ -5,8 +5,7 @@
  * @LastEditTime: 2021-10-23 19:31:57
  * @LastEditors: taimin_zhou
  */
-function* gen(se) {
-  console.log('se :>> ', se);
+function* gen(params) {
   const nodeList = [
     {
       id: "1b0amr5is",
@@ -53,11 +52,11 @@ function* gen(se) {
   ];
   for (let index = 0; index < nodeList.length; index++) {
     const element = nodeList[index];
-    // console.log("element :>> ", element);
+    console.log("element :>> ", element);
+    console.log(`params`, params);
     yield element;
   }
 }
 
-const gn = gen();
 
-export { gn };
+export { gen };
