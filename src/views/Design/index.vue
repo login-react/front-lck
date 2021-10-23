@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: taimin_zhou
  * @Date: 2021-10-21 11:37:55
- * @LastEditTime: 2021-10-23 20:13:44
+ * @LastEditTime: 2021-10-23 20:20:06
  * @LastEditors: taimin_zhou
 -->
 <template>
@@ -125,6 +125,7 @@ export default {
 
     },
     handleInit() {
+      console.log('---------->>>');
       this.gn = gen(5678);
     },
   },
