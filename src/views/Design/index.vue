@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: taimin_zhou
  * @Date: 2021-10-21 11:37:55
- * @LastEditTime: 2021-10-23 21:06:46
+ * @LastEditTime: 2021-10-23 21:17:55
  * @LastEditors: taimin_zhou
 -->
 <template>
@@ -83,7 +83,7 @@ export default {
     },
     handleInit() {
       console.log("---------->>>");
-      this.gn = gen(5678);
+      this.gn = gen(flowList.nodeList);
     },
   },
 };
