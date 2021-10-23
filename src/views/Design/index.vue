@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: taimin_zhou
  * @Date: 2021-10-21 11:37:55
- * @LastEditTime: 2021-10-23 13:42:03
+ * @LastEditTime: 2021-10-23 19:37:54
  * @LastEditors: taimin_zhou
 -->
 <template>
@@ -17,13 +17,14 @@
 
 <script>
 import EventFlow from "./Event";
-import { flowList } from "./Flow";
-import DesignUtils from "./Design";
+// import { flowList } from "./Flow";
+import { gn } from "./Design";
 import LoadingComponent from "../AsyncList/LoadingComponent.vue";
 import ErrorComponent from "../AsyncList/ErrorComponent.vue";
-const designUtils = new DesignUtils(flowList.nodeList, flowList.lineList);
+// const designUtils = new DesignUtils(flowList.nodeList, flowList.lineList);
+// console.log("test :>> ", test);
 const AsyncList = () => ({
-  component: import(/*webpackChunkName: 'list'*/"../AsyncList/List.vue"),
+  component: import(/*webpackChunkName: 'list'*/ "../AsyncList/List.vue"),
   loading: LoadingComponent,
   error: ErrorComponent,
   delay: 200,
@@ -81,27 +82,8 @@ export default {
       eventFlow.runFlow(list);
     },
     handlePageData() {
-      // designUtils
-      //   .isLink(flowList.nodeList, flowList.lineList)
-      //   .then((data) => {
-      //     this.$message({
-      //       message: data,
-      //       type: "success",
-      //     });
-      //   })
-      //   .catch((err) => {
-      //     this.$message.error({
-      //       message: err.message,
-      //       duration: 1000,
-      //     });
-      //   });
-
-      // designUtils.init(false);
-
-      const result = designUtils.receiveData(flowList, "", false);
-      // console.log("result :>> ", result);
-      // designUtils.updateOnlyStatus("1b0amr5is")
-      designUtils.flowFunRun(result, this.$confirm);
+      const value = gn.next();
+      console.log(`value--->>>>>`, value);
     },
   },
 };
