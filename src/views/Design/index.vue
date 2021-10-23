@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: taimin_zhou
  * @Date: 2021-10-21 11:37:55
- * @LastEditTime: 2021-10-23 19:37:54
+ * @LastEditTime: 2021-10-23 20:09:59
  * @LastEditors: taimin_zhou
 -->
 <template>
@@ -14,6 +14,7 @@
     <div v-if="isShow">
       <AsyncList />
     </div>
+    <Dia ref="diaConfig" />
   </div>
 </template>
 
@@ -32,18 +33,20 @@ const AsyncList = () => ({
   delay: 200,
   timeout: 3000,
 });
+import Dia from "./Dia.vue";
 export default {
   data() {
     return {
       isShow: false,
-      ge: null
+      ge: null,
     };
   },
   components: {
     AsyncList,
+    Dia,
   },
   mounted() {
-    this.gn = gen(1234)
+    this.gn = gen(1234);
   },
   methods: {
     handleClickRun() {
@@ -89,10 +92,13 @@ export default {
     handlePageData() {
       const value = this.gn.next();
       console.log(`value--->>>>>`, value);
+      if (value.value.type === "CONFIRM") {
+        this.$refs.diaConfig.open();
+      }
     },
     handleInit() {
       this.gn = gen(5678);
-    }
+    },
   },
 };
 </script>
