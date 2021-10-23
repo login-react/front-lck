@@ -2,28 +2,46 @@
  * @Description: 
  * @Author: taimin_zhou
  * @Date: 2021-10-21 11:37:55
- * @LastEditTime: 2021-10-23 10:31:53
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-10-23 13:42:03
+ * @LastEditors: taimin_zhou
 -->
 <template>
   <div>
     <el-button @click="handlePageData">线是否连接</el-button>
     <div @click="handleClickRun">点击运行</div>
+    <div v-if="isShow">
+      <AsyncList />
+    </div>
   </div>
 </template>
 
 <script>
-import EventFlow from "./Event"
-import { flowList } from "./Flow"
-import DesignUtils from "./Design"
-const designUtils = new DesignUtils(flowList.nodeList, flowList.lineList)
+import EventFlow from "./Event";
+import { flowList } from "./Flow";
+import DesignUtils from "./Design";
+import LoadingComponent from "../AsyncList/LoadingComponent.vue";
+import ErrorComponent from "../AsyncList/ErrorComponent.vue";
+const designUtils = new DesignUtils(flowList.nodeList, flowList.lineList);
+const AsyncList = () => ({
+  component: import(/*webpackChunkName: 'list'*/"../AsyncList/List.vue"),
+  loading: LoadingComponent,
+  error: ErrorComponent,
+  delay: 200,
+  timeout: 3000,
+});
 export default {
   data() {
-    return {}
+    return {
+      isShow: false,
+    };
+  },
+  components: {
+    AsyncList,
   },
   mounted() {},
   methods: {
     handleClickRun() {
+      this.isShow = true;
       const list = [
         {
           name: "步骤1",
@@ -58,9 +76,9 @@ export default {
             },
           ],
         },
-      ]
-      const eventFlow = new EventFlow()
-      eventFlow.runFlow(list)
+      ];
+      const eventFlow = new EventFlow();
+      eventFlow.runFlow(list);
     },
     handlePageData() {
       // designUtils
@@ -80,13 +98,13 @@ export default {
 
       // designUtils.init(false);
 
-      const result = designUtils.receiveData(flowList, "", false)
+      const result = designUtils.receiveData(flowList, "", false);
       // console.log("result :>> ", result);
       // designUtils.updateOnlyStatus("1b0amr5is")
-      designUtils.flowFunRun(result, this.$confirm)
+      designUtils.flowFunRun(result, this.$confirm);
     },
   },
-}
+};
 </script>
 
 <style></style>

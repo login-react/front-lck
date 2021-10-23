@@ -2,7 +2,7 @@
  * @Description:
  * @Author: taimin_zhou
  * @Date: 2021-10-22 13:21:34
- * @LastEditTime: 2021-10-23 10:55:21
+ * @LastEditTime: 2021-10-23 13:10:59
  * @LastEditors: taimin_zhou
  */
 
@@ -84,14 +84,21 @@ class DesignUtils {
   updateOnlyStatus(id) {
     console.log("id :>> ", id);
   }
-
+  // 1 termainal 中输入 npx json-server --watch db.json
+  // modal 则为模态框
   asyncFun(data, model) {
     console.error(data);
     return new Promise((resolve) => {
-      axios.get("http://localhost:3000/posts/1").then(() => {
+      //  第一步  axios.get('http://localhost:3000/posts/1')则为查询模型接口
+      axios.get("http://localhost:3000/posts/1").then((response) => {
+        console.log("data xxxxx:>> ", response.data.title);
+        // 第二步  如果是Moda则 打开模态框逻辑,只有点击确定则进行下一步
         if (data.node.openModel) {
           model("打开窗口！").then(() => {
-            resolve(888);
+            resolve(response.data.title);
+            axios.get("http://localhost:3000/posts/1").then(() => {
+              console.log("------------click");
+            });
           });
         } else {
           resolve(888);
@@ -112,25 +119,13 @@ class DesignUtils {
     // this.asyncFun(conditionTrueData)
     this.asyncFun(data[0], model)
       .then((response) => {
-        console.log("response :>> ", response);
-        console.log("conditionTrueData.name :>> ", conditionTrueData.node);
-        const type = conditionTrueData.node.type;
-        switch (type) {
-          case "CONFIRM":
-            this.openModel();
-            break;
-          default:
-            break;
-        }
+        console.log("response --->>>>>>>:>> ", response);
+        // console.log("conditionTrueData.name :>> ", conditionTrueData.node);
         this.flowFunRun(conditionTrueData.children, model);
       })
       .catch((err) => {
         console.log("err :>> ", err);
       });
-  }
-
-  openModel() {
-    console.log("====>>>>>>open the model");
   }
 }
 
