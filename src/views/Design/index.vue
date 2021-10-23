@@ -14,12 +14,13 @@
     <div v-if="isShow">
       <AsyncList />
     </div>
-    <Dia ref="diaConfig" />
+    <Dia ref="diaConfig" onOk="handleOk" />
   </div>
 </template>
 
 <script>
 import EventFlow from "./Event";
+import axios from 'axios';
 // import { flowList } from "./Flow";
 import { gen } from "./Design";
 import LoadingComponent from "../AsyncList/LoadingComponent.vue";
@@ -39,6 +40,7 @@ export default {
     return {
       isShow: false,
       ge: null,
+      geState: null
     };
   },
   components: {
@@ -47,6 +49,9 @@ export default {
   },
   mounted() {
     this.gn = gen(1234);
+    if (this.geState === null) {
+        this.enterNextState();
+    }
   },
   methods: {
     handleClickRun() {
@@ -89,12 +94,35 @@ export default {
       const eventFlow = new EventFlow();
       eventFlow.runFlow(list);
     },
+    enterNextState() {
+      this.genState = this.gn.next();
+      console.log('进入 gen 下一个状态', this.genState);
+    },
+    handleOk() {
+      this.enterNextState();
+    },
     handlePageData() {
-      const value = this.gn.next();
-      console.log(`value--->>>>>`, value);
-      if (value.value.type === "CONFIRM") {
+      // const value = this.gn.next();
+      const { done, value } = this.genState;
+
+      if (done) return;
+      if (!value || !value.type) return;
+
+      if (value.type === 'QUERY_MODEL') {
+        console.log('执行获取数据的逻辑')
+
+        axios.get("http://localhost:3000/posts/1").then(result => {
+          console.log('获取到数据: ', result)
+          if (result.status === 200) {
+            this.enterNextState();
+          }
+        })
+      }
+      
+      if (value.type === "CONFIRM") {
         this.$refs.diaConfig.open();
       }
+
     },
     handleInit() {
       this.gn = gen(5678);
