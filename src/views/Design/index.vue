@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: taimin_zhou
  * @Date: 2021-10-21 11:37:55
- * @LastEditTime: 2021-10-23 20:20:06
+ * @LastEditTime: 2021-10-23 21:06:46
  * @LastEditors: taimin_zhou
 -->
 <template>
@@ -14,14 +14,13 @@
     <div v-if="isShow">
       <AsyncList />
     </div>
-    <Dia ref="diaConfig" onOk="handleOk" />
+    <Dia ref="diaConfig" @on-ok="handleOk" />
   </div>
 </template>
 
 <script>
-import EventFlow from "./Event";
-import axios from 'axios';
-// import { flowList } from "./Flow";
+import axios from "axios";
+import { flowList } from "./Flow";
 import { gen } from "./Design";
 import LoadingComponent from "../AsyncList/LoadingComponent.vue";
 import ErrorComponent from "../AsyncList/ErrorComponent.vue";
@@ -40,7 +39,7 @@ export default {
     return {
       isShow: false,
       ge: null,
-      geState: null
+      geState: null,
     };
   },
   components: {
@@ -48,84 +47,42 @@ export default {
     Dia,
   },
   mounted() {
-    this.gn = gen(1234);
+    this.gn = gen(flowList.nodeList);
     if (this.geState === null) {
-        this.enterNextState();
+      this.handleNext();
     }
   },
   methods: {
     handleClickRun() {
       this.isShow = true;
-      const list = [
-        {
-          name: "步骤1",
-          id: "1",
-          children: [
-            {
-              name: "步骤2",
-              id: "2",
-              condition: () => true,
-              children: [
-                {
-                  name: "步骤3",
-                  condition: () => false,
-                  id: "3",
-                },
-                {
-                  name: "步骤4",
-                  id: "4",
-                },
-              ],
-            },
-            {
-              name: "步骤02",
-              id: "2",
-              condition: () => false,
-              children: [
-                {
-                  name: "步骤03",
-                  id: "3",
-                },
-              ],
-            },
-          ],
-        },
-      ];
-      const eventFlow = new EventFlow();
-      eventFlow.runFlow(list);
     },
-    enterNextState() {
+    handleNext() {
       this.genState = this.gn.next();
-      console.log('进入 gen 下一个状态', this.genState);
+      // console.log("进入 gen 下一个状态", this.genState);
     },
     handleOk() {
-      this.enterNextState();
+      this.$refs.diaConfig.close();
+      this.handleNext();
     },
     handlePageData() {
       // const value = this.gn.next();
       const { done, value } = this.genState;
-
       if (done) return;
       if (!value || !value.type) return;
-
-      if (value.type === 'QUERY_MODEL') {
-        console.log('执行获取数据的逻辑')
-
-        axios.get("http://localhost:3000/posts/1").then(result => {
-          console.log('获取到数据: ', result)
-          if (result.status === 200) {
-            this.enterNextState();
+      if (value.type === "QUERY_MODEL") {
+        axios.get("http://localhost:3000/posts/1").then((response) => {
+          console.log("获取到数据: ", response);
+          if (response.status === 200) {
+            this.handleNext();
           }
-        })
+        });
       }
-      
       if (value.type === "CONFIRM") {
-        this.$refs.diaConfig.open();
+        this.$refs.diaConfig.open(value);
       }
-
     },
     handleInit() {
-      console.log('---------->>>');
+      console.log("---------->>>");
       this.gn = gen(5678);
     },
   },
